@@ -594,12 +594,12 @@ char * fdbackparaminst(hashinfotabl cptable, char * kypfdback, char * psenc, int
 //author: wuxiaoqi
 //time: 2016-6-23
 ///////////////////////////////////////////////////////////
-char * FULL_SUB_MATCH(hashinfotabl schash, char * kuquery, char * psenck, int *Ituval, char * presfdback)
+char * FULL_SUB_MATCH(hashsptable hspt, char * probotid, hashinfotabl schash, char * kuquery, char * psenck, int *Ituval, char * presfdback)
 {
 		long scbit;
 		int slen;
 		char  *p, *pkey;
-		
+		descklist pd;
 		scbit = -1;
 	  scbit = GetHashinf(schash, kuquery);
 		if(scbit >= 0)
@@ -608,6 +608,7 @@ char * FULL_SUB_MATCH(hashinfotabl schash, char * kuquery, char * psenck, int *I
 					strcpy(psenck, (schash+scbit)->sencdkey);
 					*Ituval = (schash+scbit)->rimval;
 					*presfdback = 0;
+					pd = (schash+scbit)->fdlist;
 					if((schash+scbit)->fdlist != NULL)
 					{
 							if(((schash+scbit)->fdlist)->desckey != NULL)
@@ -897,10 +898,11 @@ char * usercontextanys(hashsptable * HMP, hashinfotabl cptable, hashpacomb cmbta
 									  	  while(pd!= NULL)
 					   	   	      {
 					   	   	      	  scval = -1;
-					   	   	      	  printf( " pb->psenckey, pd->desckey ==  %s,%s \n ", pb->psenckey, pd->desckey);
+					   	   	      	  printf( " pb->psenckey %s  == ==  pd->desckey  %s \n", pb->psenckey, pd->desckey);
 													  scval = strcmp(pb->psenckey, pd->desckey);
 						   	   	    	  if(scval == 0)
 						   	   	    	  {
+						   	   	    	  	   printf( " pb->psenckey %s  == ==  pd->desckey  %s \n", pb->psenckey, pd->desckey);
 						   	   	    	  	  *pcmbar = 0;
 						   	   	    	  	  sprintf(pcmbar, "%s--:--%d--:--%s-Y", pd->desckey, pd->dsval, pd->corrule);
 								   	   	    	  *presfdback = 0;
@@ -931,6 +933,7 @@ char * usercontextanys(hashsptable * HMP, hashinfotabl cptable, hashpacomb cmbta
 											      kdval = strcmp(pd->corrule, "#B");
 						   	   	    	  if(scval != 0 && kdval == 0)
 					   	   	      	  {//逻辑测试
+					   	   	      	  	   printf( " pd->corrule  ==  %s  N \n", pd->corrule);
 						   	   	    	  	  *pcmbar = 0;
 						   	   	    	  	  sprintf(pcmbar, "%s--:--%d--:--%s-N", pd->desckey, pd->dsval, pd->corrule);
 								   	   	    	  *presfdback = 0;
@@ -951,7 +954,7 @@ char * usercontextanys(hashsptable * HMP, hashinfotabl cptable, hashpacomb cmbta
 						   	   	    	  }
 					   	   	      	  pd = pd->pnext;
 					   	   	      }
-					   	   	      
+					   	   	       printf( " wxq === \n" );
 					   	   	      *psenck = 0;
 										 		 strcpy(psenck, "NULL");
 				         	   	   *presfdback = 0;
@@ -1067,8 +1070,13 @@ char * usercontextanys(hashsptable * HMP, hashinfotabl cptable, hashpacomb cmbta
 											 	 pd = (cptable+(*parmsit))->fdlist;
 											 	 while(pd!= NULL)
 											 	 {
-											 	 	   strcat(presfdback, pd->desckey);
-											 	 	   strcat(presfdback, ","); 
+											 	 	   ps = NULL;
+											 	 	   ps = strstr(presfdback, pd->desckey);
+											 	 	   if(ps == NULL)
+											 	 	   {
+												 	 	 		strcat(presfdback, pd->desckey);
+												 	 			strcat(presfdback, ",");
+											 	 	   }
 											 	 	   pd = pd->pnext;	 
 												 }
 												 strcat(presfdback, ";主人你要进哪个?");
@@ -1502,7 +1510,6 @@ char * usercontextanys(hashsptable * HMP, hashinfotabl cptable, hashpacomb cmbta
 												  	  }
 									  	   }
 									  }
-									  
 									  	  //找2个参数为#A的
 							  }
 							  else if(gnum == 3)
@@ -1932,7 +1939,7 @@ char *Userinteninparmg(hashsptable * HMP, hashinfotabl schash, hashindex windtab
 	  	  *presfdback = 0;
 	  	  strcpy(presfdback, pfdback);
 	  	  endsit = 0;
-	  	  printf("in 0 sav senc %s == %d \n", psenck, *Ituval);
+	  	  printf("Direct hit  %s == %d \n", psenck, *Ituval);
 			  robotpointmg(HMP, probotid, psenck, *Ituval, 1, parmsit, srnum);
 			  if(pfdback != NULL)
 	  	  		free(pfdback);
@@ -1947,54 +1954,33 @@ char *Userinteninparmg(hashsptable * HMP, hashinfotabl schash, hashindex windtab
 		    srnum = 0;
 				srnum = repqiefen(kuquery, slen, presk, wlen);
 			  srnum = 0;
-				srnum = segparareplace(cptable, presk, parmsit);//替换参数
+				srnum = segparareplace(cptable, presk, parmsit);// 
+				//查找参数
 				free(presk);
 				presk = NULL;
 				grnum = 0;
 				grnum = Analyparfdbkind(cptable, cmbtable, kuquery, parmsit, srnum, &palist);
+				//参数替换
 				//printf("22 == %s\n", kuquery);
 				jsbv = -1;
 			  *pfdback = 0;
-				jsbv = Dfbackusintent(*HMP, probotid, schash, windtable, mwhash, root, mroot, PWarry, palist, psenck, Ituval, pfdback);//提取参数后,全部命中 字串匹配 字符串相似.
-				printf("in 1 sav senc %s == %d \n", psenck, *Ituval);
-				//if(psenck != NULL &&*psenck != 0)   //*Ituval
-				//robotpointmg(HMP, probotid, psenck, *Ituval, 1, parmsit, srnum);
-				if(jsbv == 1)   //参数上下文
+				jsbv = Dfbackusintent(*HMP, probotid, schash, windtable, mwhash, root, mroot, PWarry, palist, psenck, Ituval, pfdback);//提取参数后,全部命中 子串匹配 字符串逻辑与相似.
+				printf(" After extracting the parameters, all the hit string matching string logic and  %s == %d \n", psenck, *Ituval);
+				if(psenck != NULL &&*psenck != 0)   //*Ituval
+						 robotpointmg(HMP, probotid, psenck, *Ituval, 1, parmsit, srnum);
+				if(jsbv == 1||*pfdback == 0)   //参数上下文
 				{
 					  pfdback = usercontextanys(HMP, cptable, cmbtable, clohash, probotid, parmsit, srnum, psenck, Ituval, pfdback);
-					  printf("in 2 sav senc %s == %d \n", psenck, *Ituval);
+					  printf(" Only the context of the parameter %s == %d \n", psenck, *Ituval);
 					  robotpointmg(HMP, probotid, psenck, *Ituval, 1, parmsit, srnum);
-					  
-					  if(*pfdback == 0)
-					  {
-					     *psenck = 0;
-			      		strcpy(psenck, "NULL");
-			      	  *Ituval = 0;
-			      		*presfdback = 0;
-								strcpy(presfdback, "主人，你说的话小胖识别不了，换句话试试！");
-					  }
-					  
-					  ddsit = -1;
-					  ddsit = GetHashsck(*HMP, probotid);
-					  if(ddsit >= 0)
-					  {
-					  		 pb = NULL;
-					  		 pb = ((*HMP)+ddsit)->bplist;
-					  		 while(pb != NULL)
-					  		 {
-					  		 	   for(i = 0; i<32; i++)
-					  		 	   {
-					  		 	   		if(*(pb->lparsity +i)<0)
-					  		 	   			  break;
-					  		 	   }
-					  		 	   pb = pb->pnext;
-					  		 }
-					  }
 				}
-				else
-			  {
-					    
-							//robotpointmg(HMP, probotid, psenck, *Ituval, 1, parmsit, srnum);
+				if(*pfdback == 0)
+				{
+					  *psenck = 0;
+					  strcpy(psenck,"NULL");
+					  *Ituval = 0;
+					  *pfdback = 0;
+					  strcpy(pfdback, "主人你说的，小胖不知道你说什么？！\n");
 				}
 	  }
 		*presfdback = 0;
