@@ -1,0 +1,97 @@
+
+jhz@jhz-HP MINGW32 ~ (master)
+$ /c/wxq/723/User_intention
+bash: /c/wxq/723/User_intention: Is a directory
+
+jhz@jhz-HP MINGW32 ~ (master)
+$ cd /c/wxq/723/User_intention
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (dev)
+$ git branch
+* dev
+  master
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (dev)
+$ git checkout master
+M       Intentdecision.cpp
+D       Intentdecision.cpp.bak
+Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git fetch origin
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git rebase origin/master
+Cannot rebase: You have unstaged changes.
+Please commit or stash them.
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   Intentdecision.cpp
+        deleted:    Intentdecision.cpp.bak
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git add .
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git commit -m"修改"
+[master acec161] 修改
+ 2 files changed, 31 insertions(+), 2085 deletions(-)
+ delete mode 100644 Intentdecision.cpp.bak
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+nothing to commit, working directory clean
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git commit -a
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+nothing to commit, working directory clean
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git push origin master
+error: unable to read askpass response from 'C:/Program Files (x86)/Git/mingw32/libexec/git-core/git-gui--askpass'
+Username for 'https://github.com': wuxiaoqi@ren001.com
+error: unable to read askpass response from 'C:/Program Files (x86)/Git/mingw32/libexec/git-core/git-gui--askpass'
+Password for 'https://wuxiaoqi@ren001.com@github.com':
+Counting objects: 3, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 865 bytes | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+To https://github.com/wuxiaoqi01/User_intention.git
+   f97bd07..acec161  master -> master
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git log
+commit acec1617fc02d801352f7d1ea8cdc97cb68d3656
+Author: wuxiaoqi01 <wuxiaoqi@ren001.com>
+Date:   Thu Jul 28 10:09:42 2016 +0800
+
+    修改
+
+commit f97bd078b168a02fd2fd881ea5b56b178fb0e3fe
+Author: wuxiaoqi01 <wuxiaoqi@ren001.com>
+Date:   Tue Jul 26 18:05:15 2016 +0800
+
+    用户意图代码
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$ git fetch origin
+
+jhz@jhz-HP MINGW32 /c/wxq/723/User_intention (master)
+$

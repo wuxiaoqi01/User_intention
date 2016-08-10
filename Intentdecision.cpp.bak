@@ -1897,18 +1897,17 @@ void robotpointmg(hashsptable * HMP, char * probotid, char * psenck, int itenval
 	
 		if(probotid == NULL || *probotid == 0)
 	     return ;
-    printf(" <<< %s == %d>>> \n", psenck, itenval);
+    printf("<<< %s == %d>>> \n", psenck, itenval);
 		ridsit = -1;
 		ridsit = GetHashsck(*HMP, probotid);
 		if(ridsit >= 0)
 		{
-			  printf("11111<<< %s == %d>>> \n", psenck, itenval);
+			  printf("<<< %s == %d>>> \n", psenck, itenval);
 				((*HMP)+ridsit)->spnum += ins_bplist(&(((*HMP)+ridsit)->bplist), psenck, itenval, endbit, yparsit, gum);
         return ;
 		}
 		else
 		{
-			  printf("22222<<< %s == %d>>> \n", psenck, itenval);
 				SetHashsck(HMP, probotid, psenck, itenval, endbit, yparsit, gum);
         return ;
 		}

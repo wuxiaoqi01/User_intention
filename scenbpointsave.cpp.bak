@@ -44,15 +44,15 @@ int ins_bplist(bpoinlist *BL, const char * senckey, int inttval, int endstat, lo
 		{
 				bpbit = -1;
 		    bpbit = strcmp(senckey, pk->psenckey);
-		    //if(bpbit == 0)
-		    if(bpbit == 0 && inttval == pk->itentval)
+		    if(bpbit == 0)
+		    //if(bpbit == 0 && inttval == pk->itentval)
 						break;
 		
 				pr = pk;
 				pk = pk->pnext;
 		}
-	   //if(pk!= NULL && bpbit == 0)
-    if(pk!= NULL &&bpbit == 0 && inttval == pk->itentval)
+	  if(pk!= NULL && bpbit == 0)
+    //if(pk!= NULL &&bpbit == 0 && inttval == pk->itentval)
 	  {
 	  	  //int paranum;            //已有参数个数
 	  	  pk->itentval = inttval;

@@ -34,6 +34,72 @@ int mparms2sitary(long * parsitym, long *yparsit, int gum)
 ///////////////////////////////////////////////////////////
 int ins_bplist(bpoinlist *BL, const char * senckey, int inttval, int endstat, long *yparsit, int gum)
 {
+			bpoinlist pn, pk;
+			int ln, i, bpbit = -1;
+			pk = *BL;
+		  if(pk != NULL)
+		  {
+				  if(pk->psenckey != NULL)
+				  {
+						 free(pk->psenckey);
+						 pk->psenckey = NULL;
+					}	
+					ln = 0;
+					ln = strlen(senckey);
+					pk->psenckey = (char *)malloc(ln+1);
+				  strncpy(pk->psenckey, senckey, ln);
+					*(pk->psenckey + ln) = 0;
+				 
+					pk->itentval = inttval;
+					pk->endbit = endstat;
+				  pk->paranum = 0;
+					pk->paranum = gum;
+					for(i = 0;i < 32; i++)
+							   *(pk->lparsity +i) = -1;
+					if(gum > 0 && gum < 32)
+			           mparms2sitary(pk->lparsity, yparsit, gum);
+			    pk->pnext = NULL;
+			    return 0;
+		  }
+	    else
+	    {	  
+					pn = NULL;
+					pn = (SBKPOINTNODE *)malloc(sizeof(SBKPOINTNODE));
+					if(pn != NULL)
+					{
+				      ln = 0;
+							ln = strlen(senckey);
+							pn->psenckey = (char *)malloc(ln+1);
+							strncpy(pn->psenckey, senckey, ln);
+							*(pn->psenckey + ln) = 0;
+					
+							pn->itentval = inttval;
+							pn->endbit = endstat;
+					    pn->paranum = 0;
+							pn->paranum = gum;
+						  pn->lparsity  = (long *)malloc(sizeof(long) *32);
+						  for(i = 0;i < 32; i++)
+							    *(pn->lparsity +i) = -1;
+						  if(gum > 0 && gum < 32)
+				           mparms2sitary(pn->lparsity, yparsit, gum);
+				      pn->pnext = NULL;
+				      pn->pnext = *BL;
+							*BL = pn;
+						  return 1;
+					}
+		  }
+	    return 0;
+}
+
+
+///////////////////////////////////////////////////////////
+//function:
+//parameter:
+//author: wuxiaoqi
+//time: 2016-6-23
+///////////////////////////////////////////////////////////
+int ins_bplist_1(bpoinlist *BL, const char * senckey, int inttval, int endstat, long *yparsit, int gum)
+{
 			bpoinlist pn, pk, pr;
 			int ln, i, bpbit = -1;
 		  
@@ -44,15 +110,15 @@ int ins_bplist(bpoinlist *BL, const char * senckey, int inttval, int endstat, lo
 		{
 				bpbit = -1;
 		    bpbit = strcmp(senckey, pk->psenckey);
-		    //if(bpbit == 0)
-		    if(bpbit == 0 && inttval == pk->itentval)
+		    if(bpbit == 0)
+		    //if(bpbit == 0 && inttval == pk->itentval)
 						break;
 		
 				pr = pk;
 				pk = pk->pnext;
 		}
-	   //if(pk!= NULL && bpbit == 0)
-    if(pk!= NULL &&bpbit == 0 && inttval == pk->itentval)
+	   if(pk!= NULL && bpbit == 0)
+    //if(pk!= NULL &&bpbit == 0 && inttval == pk->itentval)
 	  {
 	  	  //int paranum;            //已有参数个数
 	  	  pk->itentval = inttval;
